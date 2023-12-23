@@ -1,48 +1,73 @@
 import { API_URL } from '../../constants/api';
 import useFetchData from '../../hooks/useFetchData'
-import { Card, Spinner, Placeholder } from 'react-bootstrap'
+import{ useParams } from 'react-router-dom';
+import {  Row } from 'react-bootstrap'
 import ProductCard from './ProductCard'
+import ProductCardPlaceholder from './ProductCardPlaceholder';
+import styles from '../../styles/Card.module.css'
 
-function ProductsList() {
+function ProductsList({url=''}) {
+    let { id } = useParams();
+    if (!id){
+        id = '';
+    }
+    
     const {
         data: products,
         error,
         isLoading,
-    } = useFetchData(API_URL + '/products');
+    } = useFetchData(API_URL + url + id + '/products');
+
+    let pageTitle = products[0]?.category.name;
+    let pageMessage = 'No hay productos en esta categoría.'
+    
+    if (!id){
+        pageTitle = 'Productos';
+        pageMessage = 'No hay productos cargados.'
+    }
 
     if (isLoading) {
         return(
-        <Card style={{ width: '18rem' }}>
-      <div className="text-center m-5">
-         <Spinner animation="border" role="status">
-        <span className="visually-hidden">Loading...</span>
-        </Spinner>
-        </div>
-        <Card.Body>
-          <Placeholder as={Card.Title} animation="glow">
-            <Placeholder xs={6} />
-          </Placeholder>
-          <Placeholder as={Card.Text} animation="glow">
-            <Placeholder xs={7} /> <Placeholder xs={4} /> <Placeholder xs={4} />{' '}
-            <Placeholder xs={6} /> <Placeholder xs={8} />
-          </Placeholder>
-          <Placeholder.Button variant="primary" xs={6} />
-        </Card.Body>
-      </Card>
+            <>
+            <p className="fs-1 text-center">Cargando...</p>
+            <div className={styles.wrapper}>
+            <Row xs={1} sm={2} md={3} lg={4} xl={5} className="gy-3">
+                {Array.from({ length: 10 }).map(() => (
+                    <ProductCardPlaceholder key={self.crypto.randomUUID()}/>
+                ))} 
+            </Row>
+            </div>
+            </>
         );
     } 
 
     if (error){
-        <h1>{error}</h1>;
+        return (  
+            <p className="fs-1 text-center">Error: {error}</p>      
+        );
     }
 
-    console.log(products);
-    return ( <>
-        
-    <h1>Productos</h1>
-    {products.map ((product) =>(
-        <ProductCard key={product.id} title={product.title}/>
-    )) }
+    return ( 
+    <>    
+    {products[0] ? 
+    <p className="fs-1 text-center"> {pageTitle} </p> 
+    : <p className="fs-1 text-center"> 
+    {pageMessage} </p> }
+    <div className={styles.wrapper}>
+    <Row xs={1} sm={2} md={3} lg={4} xl={5} className="gy-3">
+        {products.map ((product) =>(
+            <ProductCard 
+            key={product.id}
+            id={product.id} 
+            title={product.title} 
+            price={product.price} 
+            category={product.category.name}
+            description={product.description}
+            image={product.images[0]}
+            />
+        )) }
+    </Row>
+    </div>
     </> );
 }
 

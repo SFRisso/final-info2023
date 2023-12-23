@@ -1,11 +1,12 @@
 import { Outlet } from 'react-router-dom';
 import NavigationBar from './NavigationBar'
 import Footer from './Footer'
+import { Container } from 'react-bootstrap'
 
 function Layout() {
     return ( <>
         <NavigationBar/>
-        <Outlet />
+        <Container><Outlet /></Container>
         <Footer/>
     </> 
     );

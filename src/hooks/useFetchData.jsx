@@ -20,9 +20,8 @@ function useDataFetch(url){
                 setError('');
                 setData(data);               
             } catch (e) {
-                console.error(e);
                 setIsLoading(false);
-                setError(e);
+                setError(e.message);
                 setData([]);                
             }      
         } 
