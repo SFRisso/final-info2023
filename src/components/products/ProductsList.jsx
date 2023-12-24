@@ -1,7 +1,7 @@
 import { API_URL } from '../../constants/api';
 import useFetchData from '../../hooks/useFetchData'
 import{ useParams } from 'react-router-dom';
-import {  Row } from 'react-bootstrap'
+import { Row } from 'react-bootstrap'
 import ProductCard from './ProductCard'
 import ProductCardPlaceholder from './ProductCardPlaceholder';
 import styles from '../../styles/Card.module.css'

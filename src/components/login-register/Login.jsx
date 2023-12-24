@@ -15,7 +15,11 @@ function Login() {
   return (
       <> 
         <p className="fs-1 text-center">Login</p>
-        <Form>
+        <Form
+            onSubmit={() =>{
+            handleLogin(name, admin);
+            navigate(from, {replace: true})
+          } }>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <FloatingLabel
                 controlId="floatingInput"
@@ -36,10 +40,7 @@ function Login() {
             } 
             />
           </Form.Group>
-          <Button variant="dark" type="submit" onClick={() =>{
-            handleLogin(name, admin);
-            navigate(from, {replace: true})
-          } }>
+          <Button variant="dark" type="submit" >
             Login
           </Button>
         </Form>

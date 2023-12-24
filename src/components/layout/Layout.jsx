@@ -5,9 +5,12 @@ import { Container } from 'react-bootstrap'
 
 function Layout() {
     return ( <>
+        <div className="flex-shrink-0">
         <NavigationBar/>
-        <Container><Outlet /></Container>
+        <Container fluid className="px-4 pt-4 col-lg-11"><Outlet /></Container>
+        </div>
         <Footer/>
+        
     </> 
     );
 }

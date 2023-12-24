@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import { Cart } from "react-bootstrap-icons";
+import { Cart, PersonCircle } from "react-bootstrap-icons";
 import { Navbar, Nav, Container, Button, NavDropdown, NavItem, Badge } from 'react-bootstrap'
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import { CartContext } from '../../context/CartContext';
 
 function AdminPanel({isAdmin}) {
   if (!isAdmin){
@@ -21,25 +22,23 @@ function AdminPanel({isAdmin}) {
 }
 
 function LoggedIn({logged}) {
-  const { handleLogout, user} = useContext(AuthContext)
+  const { handleLogout, user} = useContext(AuthContext);
   if (logged){
     return (
-      <NavItem>
-        <Navbar.Text>
-            <b >
-            <span className="text-primary">Usuario: </span> 
-            <u className="text-uppercase">{user.name}</u>
-            </b>
+      <>
+        <Navbar.Text className="pt-2 p-1 text-light ">
+          <PersonCircle color="white" size={22} className="mb-1"/> 
+          <b className="ms-1">{user.name}</b>
         </Navbar.Text>
       <Nav.Link 
       as={Link} 
       to="/products" 
-      className="link-warning link-opacity-75 link-opacity-100-hover"
+      className="link-danger link-opacity-75 link-opacity-100-hover"
       onClick={handleLogout}
       >
         Cerrar Sesión
       </Nav.Link> 
-      </NavItem>
+      </>
     );
   }
   return ( 
@@ -52,8 +51,8 @@ function LoggedIn({logged}) {
 
 
 function NavigationBar() {
-  const { user} = useContext(AuthContext)
-
+  const { user } = useContext(AuthContext);
+  const { cart } = useContext(CartContext);
   return (
     <Navbar bg="dark" data-bs-theme="dark"  expand="lg">
     <Container>
@@ -71,7 +70,7 @@ function NavigationBar() {
         <NavItem>
           <Button as={Link} to="/cart-detail" variant="secondary" size="sm" className="p-auto">
             <Cart color="white" size={22} className="mb-1"/> 
-            <Badge bg="dark" className="ms-1 mt-2">0</Badge>
+            <Badge bg="dark" className="ms-1 mt-2">{cart.products.length}</Badge>
           </Button>
         </NavItem>
       </Nav>
