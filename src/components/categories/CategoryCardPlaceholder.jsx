@@ -1,14 +1,13 @@
-import { Card, Spinner, Placeholder, Col } from 'react-bootstrap'
+import { Card, Spinner, Placeholder, Col } from 'react-bootstrap';
 
 function CategoryCardPlaceholder() {
-    return ( 
-
-        <Col>
-        <Card xs={6} >
+  return (
+    <Col>
+      <Card xs={6}>
         <div className="text-center m-5">
-            <Spinner animation="border" role="status">
-                <span className="visually-hidden">Cargando</span>
-            </Spinner>
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Cargando</span>
+          </Spinner>
         </div>
         <Card.Body>
           <Placeholder as={Card.Title} animation="glow">
@@ -19,9 +18,9 @@ function CategoryCardPlaceholder() {
             <Placeholder xs={6} /> <Placeholder xs={8} />
           </Placeholder>
         </Card.Body>
-        </Card>
-        </Col>
-     );
+      </Card>
+    </Col>
+  );
 }
 
 export default CategoryCardPlaceholder;

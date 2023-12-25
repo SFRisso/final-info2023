@@ -1,9 +1,9 @@
 function Register() {
-    return ( 
-    <> 
-    <p>Register</p>
-    </> 
-    );
+  return (
+    <>
+      <p>Register</p>
+    </>
+  );
 }
 
 export default Register;

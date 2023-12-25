@@ -1,7 +1,9 @@
 function CategoryEdit() {
-    return ( <>
-        <p>CategoryEdit</p>
-    </>  );
+  return (
+    <>
+      <p>CategoryEdit</p>
+    </>
+  );
 }
 
 export default CategoryEdit;

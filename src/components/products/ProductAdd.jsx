@@ -1,7 +1,9 @@
 function ProductAdd() {
-    return ( <>
-        <p>ProductAdd</p>
-    </> );
+  return (
+    <>
+      <p>ProductAdd</p>
+    </>
+  );
 }
 
 export default ProductAdd;

@@ -1,7 +1,9 @@
 function ProductEdit() {
-    return ( <>
-        <p>ProductEdit</p>
-    </> );
+  return (
+    <>
+      <p>ProductEdit</p>
+    </>
+  );
 }
 
 export default ProductEdit;
