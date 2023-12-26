@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   Form,
@@ -41,6 +41,13 @@ function LoginStatus(status) {
       </Alert>
     );
   }
+  if (status.status === 'success') {
+    return (
+      <Alert variant="success">
+        Login correcto.
+      </Alert>
+    );
+  }
 
   return <Alert variant="danger">Datos Incorrectos.</Alert>;
 }
@@ -52,9 +59,6 @@ function Login() {
   const [token, setToken] = useState(false);
   const { handleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
-  const location = useLocation();
-
-  let from = location.state?.from?.pathname || '/';
 
   const getUser = async (token) => {
     console.log(token)
@@ -71,7 +75,7 @@ function Login() {
     }
 
     handleLogin(json, token);
-    navigate(from, { replace: true });
+    navigate("/products");
     return json;
   };
 
