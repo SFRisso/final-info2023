@@ -3,7 +3,7 @@ import { API_URL } from '../../constants/api';
 import useFetchData from '../../hooks/useFetchData';
 import { useParams } from 'react-router-dom';
 import { CartContext } from '../../context/CartContext';
-import { Button } from 'react-bootstrap';
+import { Button, Row, Col } from 'react-bootstrap';
 import { CartPlus } from 'react-bootstrap-icons';
 
 function ProductDetail() {
@@ -54,10 +54,8 @@ function ProductDetail() {
   return (
     <>
       <p className="fs-1 text-center">Detalle de Producto</p>
-      <div className="container-fluid mt-3">
-        <div className="row">
-          <div className="col-md-8">
-            <div className="row mb-2">
+      <Row>
+      <Col>
               <div className="container mx-auto px-4">
                 {product.images ? (
                   product.images.map((img) => (
@@ -70,15 +68,15 @@ function ProductDetail() {
                 ) : (
                   <p>cargando</p>
                 )}
-              </div>
+              </div>   
+              </Col>
+              <Col>
               <div className="col-md-7">
                 <h1 className="h5 d-inline me-2">{product.title}</h1>
                 <div className="mb-1">
                   <span className="fw-bold h5 me-2">${product.price}</span>
                 </div>
               </div>
-            </div>
-          </div>
           <div>
             <p className="fw-bold mb-2 small">Descripción</p>
             <p>{product.description}</p>
@@ -124,8 +122,8 @@ function ProductDetail() {
               </div>
             </div>
           </div>
-        </div>
-      </div>
+          </Col>
+        </Row>
     </>
   );
 }

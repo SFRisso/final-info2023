@@ -13,12 +13,9 @@ import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { CartContext } from '../../context/CartContext';
 
-function AdminPanel({ isAdmin }) {
-  if (!isAdmin) {
-    return null;
-  }
-
-  return (
+function AdminPanel( {isAdmin} ) {
+  if (isAdmin === 'admin') {
+    return (
     <NavDropdown title="Panel de Administrador" id="collapsible-nav-dropdown">
       <NavDropdown.Item as={Link} to="/products/add">
         Agregar Producto
@@ -35,17 +32,21 @@ function AdminPanel({ isAdmin }) {
         Editar o Eliminar Categorías
       </NavDropdown.Item>
     </NavDropdown>
-  );
+    );
+  }
+
+    return null;
 }
 
 function LoggedIn({ logged }) {
   const { handleLogout, user } = useContext(AuthContext);
+  console.log(logged)
   if (logged) {
     return (
       <>
         <Navbar.Text className="pt-2 p-1 text-light ">
           <PersonCircle color="white" size={22} className="mb-1" />
-          <b className="ms-1">{user.name}</b>
+          <b className="ms-1 text-white">{user.userData?.name}</b>
         </Navbar.Text>
         <Nav.Link
           as={Link}
@@ -76,6 +77,7 @@ function NavigationBar() {
   const totalQuantity = cart.products.reduce((accumulator, product) => {
     return accumulator + product.quantity;
   }, 0);
+  console.log(user)
   return (
     <Navbar bg="dark" data-bs-theme="dark" expand="lg">
       <Container>
@@ -92,10 +94,10 @@ function NavigationBar() {
             <Nav.Link as={Link} to="/products">
               Productos
             </Nav.Link>
-            <AdminPanel isAdmin={true} />
+            <AdminPanel isAdmin={user.userData?.role} />
           </Nav>
           <Nav>
-            <LoggedIn logged={user.name} />
+            <LoggedIn logged={user.logged} />
             <NavItem>
               <Button
                 as={Link}

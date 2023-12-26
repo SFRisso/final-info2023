@@ -32,7 +32,7 @@ function CartItem(props) {
   }
 
   return (
-    <Card className="p-0 bg-warning-subtle mb-2">
+    <Card className="p-0 bg-secondary-subtle mb-2">
       <Card.Body className="px-2 py-1">
         <Row className="justify-content-end">
           <Col className="col-1 align-self-end">

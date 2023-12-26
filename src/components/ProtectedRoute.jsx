@@ -6,7 +6,7 @@ function ProtectedRoute({ children }) {
   const { user } = useContext(AuthContext);
   const currentLocation = useLocation();
 
-  if (!user.name) {
+  if (!user.userData?.role ==='admin') {
     return <Navigate to="/Login" state={{ from: currentLocation }} replace />;
   }
   return children;

@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext.jsx';
 import {
-  useQuery,
-  useMutation,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
@@ -28,39 +26,21 @@ import NoMatch from './NoMatch.jsx';
 
 const queryClient = new QueryClient();
 
-const getUserInfo = async (token) => {
-  const res = await fetch('https://api.escuelajs.co/api/v1/auth/profile', {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const json = await res.json();
-
-  if (json.error) {
-    throw new Error(json.error);
-  }
-
-  return json;
-};
-
 function App() {
   //Auth context
-  const [token, setToken] = useState(false);
   const [user, setUser] = useState({
-    //cambiar aca
-    name: '',
+    userData: {},
+    token: '',
+    logged: false,
   });
 
-  const handleLogin = (tokenParam) => {
+  const handleLogin = (user, tokenParam) => {
     console.log(tokenParam);
-
-    setToken(tokenParam);
-
-    //let queryUser = useQuery({
-    //queryKey: ['user'],
-    //queryFn: getUserInfo(tokenParam),
-    //});
+    setUser({
+      userData: user,
+      token: tokenParam,
+      logged: true,
+    });
 
     localStorage.setItem(
       'user',
@@ -71,26 +51,19 @@ function App() {
   };
 
   const handleLogout = () => {
-    setToken('');
-    localStorage.removeItem('token');
+    setUser({
+      userData: {},
+      token: '',
+      logged: false,
+    });
+    localStorage.removeItem('user');
   };
 
   const valueUser = {
     user,
-    token,
     handleLogin,
     handleLogout,
   };
-
-  useEffect(() => {
-    if (Object.keys(user).length === 0) {
-      console.log('no hay user');
-
-      setUser({
-        user: 'hola',
-      });
-    }
-  }, [token, user, setUser]);
 
   //Cart context
   const [cart, setCart] = useState({
@@ -183,9 +156,9 @@ function App() {
 
   useEffect(() => {
     //se carga de local storage el carrito y el usuario
-    const storedToken = localStorage.getItem('token');
-    if (storedToken) {
-      setToken(JSON.parse(storedToken));
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
     const storedCart = localStorage.getItem('cart');
     if (storedCart) {

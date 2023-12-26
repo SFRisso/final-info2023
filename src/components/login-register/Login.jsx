@@ -29,7 +29,6 @@ const loginMutation = async ({ email, password }) => {
   return response.json();
 };
 
-
 function LoginStatus(status) {
   console.log(status);
   if (status.status === 'pending') {
@@ -55,6 +54,8 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  let from = location.state?.from?.pathname || '/';
+
   const getUser = async (token) => {
     console.log(token)
     const res = await fetch('https://api.escuelajs.co/api/v1/auth/profile',  {
@@ -68,11 +69,11 @@ function Login() {
     if (json.error) {
       throw new Error(json.error);
     }
-    console.log(json)
+
+    handleLogin(json, token);
+    navigate(from, { replace: true });
     return json;
   };
-
-  let from = location.state?.from?.pathname || '/';
 
   useQuery({
     queryKey: ['user'],
@@ -86,7 +87,6 @@ function Login() {
     onSuccess: (data) => {
       setStatus(true);
       setToken(data.access_token)
-      //navigate(from, { replace: true });
       console.log('Login exitoso', data);
     },
     onError: (data) => {

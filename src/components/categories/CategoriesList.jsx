@@ -53,7 +53,7 @@ function CategoriesList() {
         </Form>
         </Col>
       </Row>
-      <div className={styles.wrapper}>
+      <div>
         <Row xs={1} sm={2} md={3} lg={4} xl={5} className="gy-3">
           {categories.filter((category) => {
                 return search.toLowerCase() === ''
