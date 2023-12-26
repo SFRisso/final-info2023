@@ -44,7 +44,11 @@ function ProductDetail() {
   }
 
   if (error) {
-    return <h1>Error: {error}</h1>;
+    return (
+      <>
+        <p className="fs-1 text-center">Error: {error}</p>
+      </>
+    );
   }
 
   return (

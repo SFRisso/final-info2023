@@ -24,7 +24,7 @@ function AdminPanel({ isAdmin }) {
         Agregar Producto
       </NavDropdown.Item>
       <NavDropdown.Item as={Link} to="/products/edit/">
-        Editar Productos
+        Editar o Eliminar Productos
       </NavDropdown.Item>
       <NavDropdown.Divider />
       <NavDropdown.Item as={Link} to="/categories/add">
@@ -32,7 +32,7 @@ function AdminPanel({ isAdmin }) {
         Agregar Categoría
       </NavDropdown.Item>
       <NavDropdown.Item as={Link} to="/categories/edit/">
-        Editar Categorías
+        Editar o Eliminar Categorías
       </NavDropdown.Item>
     </NavDropdown>
   );
@@ -73,6 +73,9 @@ function LoggedIn({ logged }) {
 function NavigationBar() {
   const { user } = useContext(AuthContext);
   const { cart } = useContext(CartContext);
+  const totalQuantity = cart.products.reduce((accumulator, product) => {
+    return accumulator + product.quantity;
+  }, 0);
   return (
     <Navbar bg="dark" data-bs-theme="dark" expand="lg">
       <Container>
@@ -89,7 +92,7 @@ function NavigationBar() {
             <Nav.Link as={Link} to="/products">
               Productos
             </Nav.Link>
-            <AdminPanel isAdmin={user.admin} />
+            <AdminPanel isAdmin={true} />
           </Nav>
           <Nav>
             <LoggedIn logged={user.name} />
@@ -103,7 +106,7 @@ function NavigationBar() {
               >
                 <Cart color="white" size={22} className="mb-1" />
                 <Badge bg="dark" className="ms-1 mt-2">
-                  {cart.products.length}
+                  {totalQuantity}
                 </Badge>
               </Button>
             </NavItem>

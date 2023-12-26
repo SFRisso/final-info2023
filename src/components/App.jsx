@@ -6,7 +6,6 @@ import { CartContext } from '../context/CartContext.jsx';
 import {
   useQuery,
   useMutation,
-  useQueryClient,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
@@ -15,9 +14,11 @@ import Home from './Home.jsx';
 import CategoriesList from './categories/CategoriesList.jsx';
 import CategoryAdd from './categories/CategoryAdd.jsx';
 import CategoryEdit from './categories/CategoryEdit.jsx';
+import CategoryEditList from './categories/CategoryEditList.jsx';
 import ProductsList from './products/ProductsList.jsx';
 import ProductDetail from './products/ProductDetail.jsx';
 import ProductAdd from './products/ProductAdd.jsx';
+import ProductEditList from './products/ProductEditList.jsx';
 import ProductEdit from './products/ProductEdit.jsx';
 import CartDetail from './cart/CartDetail.jsx';
 import Login from './login-register/Login.jsx';
@@ -25,44 +26,71 @@ import Register from './login-register/Register.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 import NoMatch from './NoMatch.jsx';
 
-function App() {
-  const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
+const getUserInfo = async (token) => {
+  const res = await fetch('https://api.escuelajs.co/api/v1/auth/profile', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const json = await res.json();
+
+  if (json.error) {
+    throw new Error(json.error);
+  }
+
+  return json;
+};
+
+function App() {
   //Auth context
+  const [token, setToken] = useState(false);
   const [user, setUser] = useState({
-    id: '',
-    user: '',
-    admin: false,
+    //cambiar aca
+    name: '',
   });
 
-  const handleLogin = (name, admin) => {
-    setUser({
-      name,
-      admin,
-    });
+  const handleLogin = (tokenParam) => {
+    console.log(tokenParam);
+
+    setToken(tokenParam);
+
+    //let queryUser = useQuery({
+    //queryKey: ['user'],
+    //queryFn: getUserInfo(tokenParam),
+    //});
 
     localStorage.setItem(
       'user',
       JSON.stringify({
-        name,
-        admin,
+        user,
       })
     );
   };
 
   const handleLogout = () => {
-    setUser({
-      name: '',
-      admin: false,
-    });
-    localStorage.removeItem('user');
+    setToken('');
+    localStorage.removeItem('token');
   };
 
   const valueUser = {
     user,
+    token,
     handleLogin,
     handleLogout,
   };
+
+  useEffect(() => {
+    if (Object.keys(user).length === 0) {
+      console.log('no hay user');
+
+      setUser({
+        user: 'hola',
+      });
+    }
+  }, [token, user, setUser]);
 
   //Cart context
   const [cart, setCart] = useState({
@@ -120,6 +148,13 @@ function App() {
     );
   };
 
+  const handleCleanCart = () => {
+    setCart({
+      products: []
+    })
+    localStorage.removeItem('cart');
+  }
+
   const handleNewQuantity = (id, quantityParam) => {
     let newProducts = [...cart.products];
     const obj = newProducts.find((p) => p.id === id);
@@ -143,13 +178,14 @@ function App() {
     handleAddCartProduct,
     handleDeleteCartProduct,
     handleNewQuantity,
+    handleCleanCart
   };
 
   useEffect(() => {
     //se carga de local storage el carrito y el usuario
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(JSON.parse(storedToken));
     }
     const storedCart = localStorage.getItem('cart');
     if (storedCart) {
@@ -184,6 +220,14 @@ function App() {
                   path="/categories/edit"
                   element={
                     <ProtectedRoute>
+                      <CategoryEditList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/categories/edit/:id"
+                  element={
+                    <ProtectedRoute>
                       <CategoryEdit />
                     </ProtectedRoute>
                   }
@@ -200,6 +244,14 @@ function App() {
                 />
                 <Route
                   path="/products/edit"
+                  element={
+                    <ProtectedRoute>
+                      <ProductEditList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/products/edit/:id"
                   element={
                     <ProtectedRoute>
                       <ProductEdit />

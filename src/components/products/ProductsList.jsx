@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { API_URL } from '../../constants/api';
 import useFetchData from '../../hooks/useFetchData';
 import { useParams } from 'react-router-dom';
-import { Row } from 'react-bootstrap';
+import { Row, Col, Form, InputGroup } from 'react-bootstrap';
 import ProductCard from './ProductCard';
 import ProductCardPlaceholder from './ProductCardPlaceholder';
 import styles from '../../styles/Card.module.css';
@@ -11,7 +12,7 @@ function ProductsList({ url = '' }) {
   if (!id) {
     id = '';
   }
-
+  const [search, setSearch] = useState('');
   const {
     data: products,
     error,
@@ -52,9 +53,25 @@ function ProductsList({ url = '' }) {
       ) : (
         <p className="fs-1 text-center">{pageMessage} </p>
       )}
+      <Row className="justify-content-center">
+      <Col className="col-lg-4">
+      <Form>
+          <InputGroup className="my-3" size="lg">
+            <Form.Control
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Buscar productos"
+            />
+          </InputGroup>
+        </Form>
+        </Col>
+      </Row>
       <div className={styles.wrapper}>
         <Row xs={1} sm={2} md={3} lg={4} xl={5} className="gy-3">
-          {products.map((product) => (
+          {products.filter((product) => {
+                return search.toLowerCase() === ''
+                  ? product
+                  : product.title.toLowerCase().includes(search);
+              }).map((product) => (
             <ProductCard
               key={product.id}
               id={product.id}

@@ -1,9 +1,11 @@
 import { useState, useContext } from 'react';
 import { CartContext } from '../../context/CartContext';
 import { Card, Button, Col, Row } from 'react-bootstrap';
+import { XSquareFill } from 'react-bootstrap-icons';
 
 function CartItem(props) {
-  const { handleNewQuantity } = useContext(CartContext);
+  const { handleNewQuantity, handleDeleteCartProduct } =
+    useContext(CartContext);
   const [quantityState, setQuantityState] = useState(props.quantity);
 
   function handleChange(event, id) {
@@ -32,6 +34,18 @@ function CartItem(props) {
   return (
     <Card className="p-0 bg-warning-subtle mb-2">
       <Card.Body className="px-2 py-1">
+        <Row className="justify-content-end">
+          <Col className="col-1 align-self-end">
+            <Button
+              size="sm"
+              variant="danger"
+              className="pt-0 m-0"
+              onClick={() => handleDeleteCartProduct(props.id)}
+            >
+              <XSquareFill color="white" size={16} />
+            </Button>
+          </Col>
+        </Row>
         <Row className="align-items-center">
           <Col className="col-md-2 col-4 mt-2">
             <Card.Img
